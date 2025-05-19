@@ -1,6 +1,5 @@
 import 'package:auth_buttons/auth_buttons.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/app/library/auth/presentation/partials/textfield.partials.auth.dart';
 import 'package:myapp/app/library/auth/presentation/partials/index.dart'
     as txtField;
 
