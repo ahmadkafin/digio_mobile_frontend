@@ -6,15 +6,26 @@ class TextField {
     isObscure,
     isLoading,
     isGoogleLogin,
+    changeObscure,
   ) {
     return [
       TextFieldPartial(
         deviceSize: deviceSize,
-        hint: "username",
+        hint: "Username",
         errMessage: "Username Cannot be empty",
+        isObscure: false,
+        isLoading: isLoading,
+        isGoogleLogin: isGoogleLogin,
+        changeObscure: changeObscure,
+      ),
+      TextFieldPartial(
+        deviceSize: deviceSize,
+        hint: "Password",
+        errMessage: "Password Cannot be empty",
         isObscure: !isObscure,
         isLoading: isLoading,
         isGoogleLogin: isGoogleLogin,
+        changeObscure: changeObscure,
       ),
     ];
   }
