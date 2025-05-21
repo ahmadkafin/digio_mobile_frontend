@@ -1,0 +1,39 @@
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:flutter/material.dart';
+
+class BottomNavBarPartialsHome extends StatelessWidget {
+  const BottomNavBarPartialsHome({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ConvexAppBar(
+      items: [
+        TabItem(
+          icon: Icons.home,
+          title: "Home",
+        ),
+        TabItem(
+          icon: Icons.info,
+          title: "Info",
+        ),
+        TabItem(
+          icon: Icons.map,
+          title: "Fiel Map",
+        ),
+        TabItem(
+          icon: Icons.book,
+          title: "Flip Book",
+        ),
+        TabItem(
+          icon: Icons.person,
+          title: "Profile",
+        ),
+      ],
+      // items: [...homePartial.items()],
+      color: Colors.black,
+      activeColor: Color.fromRGBO(255, 170, 0, 1),
+      backgroundColor: Colors.white,
+      style: TabStyle.fixedCircle,
+    );
+  }
+}
