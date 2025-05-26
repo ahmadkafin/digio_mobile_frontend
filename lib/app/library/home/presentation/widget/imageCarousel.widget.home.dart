@@ -1,6 +1,8 @@
+import 'package:animations/animations.dart';
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/app/library/banner/presentation/page/detail.page.banner.dart';
 
 class ImageCarouselWidgetHome extends StatelessWidget {
   const ImageCarouselWidgetHome({
@@ -12,11 +14,9 @@ class ImageCarouselWidgetHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 5,
+    return SliverToBoxAdapter(
       child: Container(
         width: deviceSize.width,
-        height: deviceSize.height,
         padding: const EdgeInsets.symmetric(vertical: 15),
         color: Colors.white,
         child: CarouselSlider(
@@ -32,14 +32,79 @@ class ImageCarouselWidgetHome extends StatelessWidget {
                         Radius.circular(10),
                       ),
                     ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                      child: Image.network(
-                        "https://picsum.photos/300/200?random=$i",
-                        fit: BoxFit.fill,
-                      ),
+                    child: OpenContainer(
+                      closedBuilder:
+                          (BuildContext _, VoidCallback openContainer) {
+                        return ClipRRect(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
+                          ),
+                          child: Stack(
+                            fit: StackFit.expand,
+                            alignment: Alignment.bottomRight,
+                            children: [
+                              Positioned(
+                                width: deviceSize.width,
+                                child: Image.network(
+                                  "https://picsum.photos/1920/1080?random=$i",
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: Container(
+                                  padding: const EdgeInsets.only(
+                                      left: 10, right: 10),
+                                  width: 135,
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    color: Color.fromRGBO(0, 0, 0, 0.6),
+                                    borderRadius: BorderRadius.only(
+                                      bottomRight: Radius.circular(10),
+                                      topLeft: Radius.circular(10),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Lebih Lanjut",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      Container(
+                                        width: 25,
+                                        height: 25,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(50),
+                                          ),
+                                        ),
+                                        child: Icon(
+                                          Icons.arrow_forward_ios,
+                                          size: 10,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      openBuilder:
+                          (BuildContext _, VoidCallback closeContainer) {
+                        return DetailPageBanner(
+                          image: "https://picsum.photos/1920/1080?random=$i",
+                          title: i.toString(),
+                        );
+                      },
                     ),
                   );
                 },
@@ -53,8 +118,8 @@ class ImageCarouselWidgetHome extends StatelessWidget {
             enableInfiniteScroll: true,
             reverse: false,
             autoPlay: true,
-            autoPlayInterval: Duration(seconds: 3),
-            autoPlayAnimationDuration: Duration(milliseconds: 1000),
+            autoPlayInterval: Duration(seconds: 5),
+            autoPlayAnimationDuration: Duration(milliseconds: 1500),
             autoPlayCurve: Curves.fastOutSlowIn,
             enlargeCenterPage: true,
             enlargeFactor: 0.2,

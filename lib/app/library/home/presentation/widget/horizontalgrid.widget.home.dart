@@ -10,14 +10,12 @@ class HorizontalGridHeaderWidgetHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      flex: 3,
+    return SliverToBoxAdapter(
       child: Container(
         width: deviceSize.width,
-        height: deviceSize.height,
         padding: const EdgeInsets.symmetric(
-          horizontal: 10,
-          vertical: 4,
+          horizontal: 1,
+          vertical: 10,
         ),
         decoration: BoxDecoration(
           color: Colors.white,

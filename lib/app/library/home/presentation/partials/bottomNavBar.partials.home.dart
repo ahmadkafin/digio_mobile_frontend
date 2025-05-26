@@ -13,16 +13,16 @@ class BottomNavBarPartialsHome extends StatelessWidget {
           title: "Home",
         ),
         TabItem(
-          icon: Icons.info,
-          title: "Info",
+          icon: Icons.inventory,
+          title: "Product",
         ),
         TabItem(
           icon: Icons.map,
-          title: "Fiel Map",
+          title: "Field Map",
         ),
         TabItem(
           icon: Icons.book,
-          title: "Flip Book",
+          title: "Infra Book",
         ),
         TabItem(
           icon: Icons.person,
@@ -34,6 +34,7 @@ class BottomNavBarPartialsHome extends StatelessWidget {
       activeColor: Color.fromRGBO(255, 170, 0, 1),
       backgroundColor: Colors.white,
       style: TabStyle.fixedCircle,
+      elevation: 8,
     );
   }
 }

@@ -1,20 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:myapp/app/library/home/presentation/page/detail.menu.home.page.dart';
+import 'package:myapp/app/library/home/providers/child.menu.providers.dart';
+import 'package:myapp/app/library/home/response/menu.response.dart';
+import 'package:myapp/core/utils/fontAwesomeMapping.utils.dart';
+import 'package:myapp/core/utils/gradientColorBackground.utils.dart';
+import 'package:page_transition/page_transition.dart';
 
-class BottomSheetMenWidgetHome extends StatelessWidget {
+class BottomSheetMenWidgetHome extends HookConsumerWidget {
   const BottomSheetMenWidgetHome({
     super.key,
     required this.deviceSize,
+    required this.data,
   });
 
   final Size deviceSize;
+  final List<MenuResponse> data;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       width: deviceSize.width,
-      height: deviceSize.height / 4,
+      height: deviceSize.height / 2.5,
+      color: Colors.white,
       padding: const EdgeInsets.symmetric(
-        horizontal: 20,
+        horizontal: 25,
         vertical: 5,
       ),
       child: Column(
@@ -35,36 +46,88 @@ class BottomSheetMenWidgetHome extends StatelessWidget {
           Expanded(
             child: GridView.builder(
               physics: NeverScrollableScrollPhysics(),
-              itemCount: 6,
+              itemCount: data.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 5,
+                crossAxisCount: 4,
                 crossAxisSpacing: 1,
                 childAspectRatio: 1,
-                mainAxisSpacing: 15,
+                mainAxisSpacing: 20,
               ),
               itemBuilder: (context, index) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: Colors.black,
-                      child: Icon(
-                        Icons.home,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Text(
-                        "Monev AIM",
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w800,
+                return GestureDetector(
+                  onTap: () => ref
+                      .read(childMenuProviders.notifier)
+                      .get("ABC", data[index].menuid!)
+                      .then(
+                        (res) => res.fold(
+                          (l) => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DetailMenuHomePage(
+                                parrentid: data[index].menuid!,
+                                labelparent: data[index].label!,
+                                parentIcon: data[index].iconFlt!,
+                                data: l,
+                              ),
+                            ),
+                          ),
+                          (r) => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DetailMenuHomePage(
+                                parrentid: data[index].menuid!,
+                                labelparent: data[index].label!,
+                                data: r,
+                                parentIcon: data[index].iconFlt!,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
+                  child: GridTile(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              tileMode: TileMode.clamp,
+                              colors: getColorData(data[index].label!) ??
+                                  [
+                                    Colors.deepOrange,
+                                    Colors.black,
+                                  ],
+                            ),
+                            shape: BoxShape.circle,
+                          ),
+                          child: CircleAvatar(
+                            backgroundColor: Colors.transparent,
+                            radius: 25,
+                            child: FaIcon(
+                              getIconData(data[index].iconFlt!) ??
+                                  FontAwesomeIcons.question,
+                              color: Colors.white,
+                              size: 21,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: Text(
+                            data[index].label!,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 );
               },
             ),

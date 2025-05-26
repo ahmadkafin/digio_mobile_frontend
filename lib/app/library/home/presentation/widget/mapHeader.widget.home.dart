@@ -10,12 +10,21 @@ class MapHeaderWidgetHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 3,
+    return SliverToBoxAdapter(
       child: Container(
-        height: deviceSize.height / 7.5,
+        height: deviceSize.height / 7,
+        // decoration: BoxDecoration(
+        //   boxShadow: [
+        //     BoxShadow(
+        //       color: Colors.grey.withValues(alpha: 0.5),
+        //       spreadRadius: 2,
+        //       blurRadius: 10,
+        //       offset: Offset(0, 10),
+        //     ),
+        //   ],
+        // ),
         child: Stack(
-          alignment: Alignment.centerRight,
+          alignment: Alignment.topRight,
           children: [
             SizedBox(
               width: deviceSize.width,
@@ -27,38 +36,17 @@ class MapHeaderWidgetHome extends StatelessWidget {
                 width: deviceSize.width,
               ),
             ),
-            Column(
-              children: [
-                Expanded(
-                  child: Container(
-                    color: Color.fromRGBO(0, 0, 0, 0.5),
-                    width: deviceSize.width / 2.5,
-                    child: Center(
-                      child: Text(
-                        "Bar Chart",
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
+            GestureDetector(
+              onTap: () {},
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: Icon(
+                  Icons.fullscreen,
+                  color: Colors.white,
                 ),
-                Expanded(
-                  child: Container(
-                    color: Color.fromRGBO(255, 165, 31, 0.6),
-                    width: deviceSize.width / 2.5,
-                    child: Center(
-                      child: Text(
-                        "Pipa",
-                        style: TextStyle(
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            )
+              ),
+            ),
           ],
         ),
       ),

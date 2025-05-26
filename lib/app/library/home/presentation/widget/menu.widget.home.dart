@@ -1,23 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myapp/app/library/auth/presentation/page/login.page.auth.dart';
+import 'package:myapp/app/library/home/presentation/page/detail.menu.home.page.dart';
+import 'package:myapp/app/library/home/presentation/partials/childrenMenu.partials.home.dart';
 import 'package:myapp/app/library/home/presentation/widget/bottomsheetmenu.widget.home.dart';
+import 'package:myapp/app/library/home/providers/child.menu.providers.dart';
+import 'package:myapp/app/library/home/response/menu.response.dart';
+import 'package:myapp/core/utils/fontAwesomeMapping.utils.dart';
+import 'package:myapp/core/utils/gradientColorBackground.utils.dart';
 
-class MenuWidgetHome extends StatelessWidget {
+class MenuWidgetHome extends HookConsumerWidget {
   const MenuWidgetHome({
     super.key,
     required this.deviceSize,
+    required this.data,
   });
 
   final Size deviceSize;
+  final List<MenuResponse> data;
 
   @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      flex: 2,
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SliverToBoxAdapter(
       child: Container(
         color: Colors.white,
         width: deviceSize.width,
-        height: deviceSize.height / 10,
         padding: const EdgeInsets.symmetric(
           horizontal: 25,
           vertical: 10,
@@ -25,107 +33,47 @@ class MenuWidgetHome extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            GestureDetector(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CircleAvatar(
-                    backgroundColor: Colors.black,
-                    child: Icon(
-                      Icons.home_repair_service,
-                      color: Colors.white,
-                    ),
-                  ),
-                  Text(
-                    "MONEV AIM",
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  )
-                ],
-              ),
-            ),
-            GestureDetector(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CircleAvatar(
-                    backgroundColor: Colors.black,
-                    child: Icon(
-                      Icons.keyboard,
-                      color: Colors.white,
-                    ),
-                  ),
-                  Text(
-                    "Dashboard",
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  )
-                ],
-              ),
-            ),
-            GestureDetector(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CircleAvatar(
-                    backgroundColor: Colors.black,
-                    child: Icon(
-                      Icons.map,
-                      color: Colors.white,
-                    ),
-                  ),
-                  Text(
-                    "Map",
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  )
-                ],
-              ),
-            ),
-            GestureDetector(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CircleAvatar(
-                    backgroundColor: Colors.black,
-                    child: Icon(
-                      Icons.laptop,
-                      color: Colors.white,
-                    ),
-                  ),
-                  Text(
-                    "Apps",
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  )
-                ],
-              ),
-            ),
+            ChildrenMenuPartials(data: data, index: 0),
+            ChildrenMenuPartials(data: data, index: 1),
+            ChildrenMenuPartials(data: data, index: 2),
+            ChildrenMenuPartials(data: data, index: 3),
             GestureDetector(
               onTap: () {
                 showModalBottomSheet(
                   context: context,
                   builder: (BuildContext ctx) {
-                    return BottomSheetMenWidgetHome(deviceSize: deviceSize);
+                    return BottomSheetMenWidgetHome(
+                      deviceSize: deviceSize,
+                      data: data,
+                    );
                   },
                 );
               },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CircleAvatar(
-                    backgroundColor: Colors.black,
-                    child: Icon(
-                      Icons.apps_rounded,
-                      color: Colors.white,
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        tileMode: TileMode.clamp,
+                        colors: getColorData("Lainnya") ??
+                            [
+                              Colors.deepOrange,
+                              Colors.black,
+                            ],
+                      ),
+                      shape: BoxShape.circle,
+                    ),
+                    child: CircleAvatar(
+                      radius: 30,
+                      backgroundColor: Colors.transparent,
+                      child: Icon(
+                        Icons.apps_rounded,
+                        color: Colors.white,
+                        size: 21,
+                      ),
                     ),
                   ),
                   Text(
