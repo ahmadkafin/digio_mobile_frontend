@@ -20,18 +20,20 @@ class _ProfilePartialsHomeState extends State<ProfilePartialsHome> {
   @override
   Widget build(BuildContext context) {
     Size deviceSize = MediaQuery.of(context).size;
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        top: true,
+    return SafeArea(
+      top: false,
+      child: Container(
+        padding: const EdgeInsets.only(top: 80),
+        color: Colors.white,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Expanded(
               flex: 1,
               child: Container(
                 alignment: Alignment.center,
+                // color: Colors.amber,
                 width: deviceSize.width,
                 child: FractionallySizedBox(
                   widthFactor: 0.9,
@@ -98,10 +100,10 @@ class _ProfilePartialsHomeState extends State<ProfilePartialsHome> {
               ),
             ),
             Expanded(
-              flex: 3,
+              flex: 4,
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 20),
                 width: deviceSize.width,
+                // color: Colors.red,
                 // decoration: BoxDecoration(
                 //   color: Color.fromRGBO(30, 30, 30, 1),
                 //   borderRadius: BorderRadius.only(
@@ -110,6 +112,7 @@ class _ProfilePartialsHomeState extends State<ProfilePartialsHome> {
                 //   ),
                 // ),
                 child: ListView(
+                  shrinkWrap: true,
                   children: [
                     ListTile(
                       leading: Icon(

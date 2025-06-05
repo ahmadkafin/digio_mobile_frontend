@@ -43,15 +43,16 @@ class ChildrenMenuPartials extends HookConsumerWidget {
         children: [
           Container(
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: getColorData(data[index].label!) ??
-                    [
-                      Colors.deepOrange,
-                      Colors.black,
-                    ],
-              ),
+              color: Colors.black,
+              // gradient: LinearGradient(
+              //   begin: Alignment.topCenter,
+              //   end: Alignment.bottomCenter,
+              //   colors: getColorData(data[index].label!) ??
+              //       [
+              //         Colors.deepOrange,
+              //         Colors.black,
+              //       ],
+              // ),
               shape: BoxShape.circle,
             ),
             child: CircleAvatar(
@@ -62,7 +63,7 @@ class ChildrenMenuPartials extends HookConsumerWidget {
                 child: FaIcon(
                   getIconData(data[index].iconFlt!),
                   color: Colors.white,
-                  size: 21,
+                  size: 25,
                 ),
               ),
             ),

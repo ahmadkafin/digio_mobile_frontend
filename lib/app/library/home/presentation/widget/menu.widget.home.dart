@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myapp/app/library/auth/presentation/page/login.page.auth.dart';
@@ -15,78 +16,67 @@ class MenuWidgetHome extends HookConsumerWidget {
     super.key,
     required this.deviceSize,
     required this.data,
+    required this.curIndex,
+    required this.setActive,
   });
 
   final Size deviceSize;
   final List<MenuResponse> data;
+  final Function setActive;
+  final int curIndex;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return SliverToBoxAdapter(
-      child: Container(
-        color: Colors.white,
-        width: deviceSize.width,
-        padding: const EdgeInsets.symmetric(
-          horizontal: 25,
-          vertical: 10,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            ChildrenMenuPartials(data: data, index: 0),
-            ChildrenMenuPartials(data: data, index: 1),
-            ChildrenMenuPartials(data: data, index: 2),
-            ChildrenMenuPartials(data: data, index: 3),
-            GestureDetector(
-              onTap: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext ctx) {
-                    return BottomSheetMenWidgetHome(
-                      deviceSize: deviceSize,
-                      data: data,
-                    );
-                  },
-                );
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        tileMode: TileMode.clamp,
-                        colors: getColorData("Lainnya") ??
-                            [
-                              Colors.deepOrange,
-                              Colors.black,
-                            ],
+    double lint = deviceSize.width / deviceSize.height;
+    return Container(
+      width: deviceSize.width,
+      padding: const EdgeInsets.symmetric(
+        vertical: 10,
+      ),
+      child: SizedBox(
+        height: 35, // Needed to constrain vertical height
+        child: ListView.builder(
+          itemBuilder: (context, index) {
+            if (data[index].label == 'Help') {
+              return null;
+            } else {
+              return GestureDetector(
+                onTap: () => setActive(index, data[index].menuid),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: Chip(
+                    elevation: 8,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(50),
                       ),
-                      shape: BoxShape.circle,
                     ),
-                    child: CircleAvatar(
-                      radius: 30,
-                      backgroundColor: Colors.transparent,
-                      child: Icon(
-                        Icons.apps_rounded,
+                    avatar: CircleAvatar(
+                      radius: 20,
+                      backgroundColor: Colors.black,
+                      child: FaIcon(
+                        getIconData(data[index].iconFlt!) ??
+                            FontAwesomeIcons.question,
                         color: Colors.white,
-                        size: 21,
+                        size: 10,
                       ),
                     ),
-                  ),
-                  Text(
-                    "Lainnya",
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w900,
+                    label: Text(
+                      data[index].label!,
+                      overflow: TextOverflow.visible,
                     ),
-                  )
-                ],
-              ),
-            )
-          ],
+                    labelStyle: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    backgroundColor: curIndex == index ? Colors.amber : null,
+                  ),
+                ),
+              );
+            }
+          },
+          itemCount: data.length,
+          scrollDirection: Axis.horizontal,
         ),
       ),
     );

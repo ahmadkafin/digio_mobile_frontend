@@ -29,6 +29,7 @@ class _HomePageHomeState extends ConsumerState<HomePageHome> {
     return DefaultTabController(
       length: 5,
       child: Scaffold(
+        backgroundColor: Colors.black,
         body: TabBarView(
           physics: NeverScrollableScrollPhysics(),
           children: [

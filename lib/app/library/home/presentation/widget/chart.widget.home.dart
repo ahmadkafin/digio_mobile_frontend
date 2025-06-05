@@ -28,9 +28,10 @@ class ChartWidgetHome extends StatelessWidget {
               Text(
                 "Pipeline Growth",
                 style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 12),
+                  color: Colors.black,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ],
           ),

@@ -1,12 +1,29 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:myapp/app/library/products/presentation/page/video.page.products.dart';
 
-class DetailPageProducts extends StatelessWidget {
+class DetailPageProducts extends StatefulWidget {
   const DetailPageProducts({
     super.key,
     required this.image,
     required this.title,
   });
   final String image, title;
+
+  @override
+  State<DetailPageProducts> createState() => _DetailPageProductsState();
+}
+
+class _DetailPageProductsState extends State<DetailPageProducts> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,18 +46,35 @@ class DetailPageProducts extends StatelessWidget {
                   horizontal: 10.0,
                   vertical: 5,
                 ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Color.fromRGBO(255, 170, 0, 1),
+                child: OpenContainer(
+                  closedBuilder: (BuildContext _, VoidCallback openContainer) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(255, 170, 0, 1),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(50),
+                        ),
+                      ),
+                      child: IconButton(
+                        onPressed: openContainer,
+                        icon: Icon(
+                          Icons.play_arrow,
+                          color: Color.fromRGBO(30, 30, 30, 1),
+                        ),
+                      ),
+                    );
+                  },
+                  openBuilder: (BuildContext _, VoidCallback action) {
+                    return VideoPageProducts(
+                      videoTitle: widget.title,
+                      videoId: "cXmxusAKdzo",
+                    );
+                  },
+                  transitionType: ContainerTransitionType.fade,
+                  closedColor: Colors.transparent,
+                  closedShape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(
-                      Radius.circular(50),
-                    ),
-                  ),
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.play_arrow,
-                      color: Color.fromRGBO(30, 30, 30, 1),
+                      Radius.circular(50.0),
                     ),
                   ),
                 ),
@@ -48,16 +82,16 @@ class DetailPageProducts extends StatelessWidget {
             ],
             flexibleSpace: FlexibleSpaceBar(
               title: Text(
-                title,
+                widget.title,
                 style: TextStyle(
                   color: Colors.white,
                 ),
               ),
               centerTitle: true,
               collapseMode: CollapseMode.parallax,
-              background: Container(
+              background: SizedBox(
                 child: Image.network(
-                  image,
+                  widget.image,
                   fit: BoxFit.cover,
                 ),
               ),
