@@ -4,31 +4,44 @@ import 'package:myapp/app/library/home/implement/child.menu.implement.dart';
 import 'package:myapp/app/library/home/repositories/child.menu.repositories.dart';
 import 'package:myapp/app/library/home/response/menu.response.dart';
 
-class ChildMenuProviders extends StateNotifier<AsyncValue<dynamic>> {
-  Ref? ref;
+/// Refactored ChildMenuProviders to maintain a cache of menu data per parentId
+class ChildMenuProviders
+    extends StateNotifier<Map<String, List<MenuResponse>>> {
+  final Ref ref;
 
-  ChildMenuProviders({required this.ref}) : super(const AsyncData(null));
+  ChildMenuProviders(this.ref) : super({});
 
+  /// Fetches and caches menu data based on parentId
   Future<Either<List<MenuResponse>, List<MenuResponse>>> get(
     String token,
-    String parrentid,
+    String username,
+    String directory,
+    String parentId,
   ) async {
-    state = const AsyncLoading();
-    final res = await ref!.read(childMenuRepoProvider).get(token, parrentid);
+    final res = await ref
+        .read(childMenuRepoProvider)
+        .get(token, username, directory, parentId);
+
+    // Update the state by adding or replacing entry for this parentId
+    state = {
+      ...state,
+      parentId: res,
+    };
+
     if (res.isEmpty) {
       return const Left([]);
     } else {
-      List<MenuResponse> data =
-          ref!.read(setChildMenuStateProvider.notifier).state = res;
-      ref!.read(setChildMenuProvider(res));
-      return Right(data);
+      return Right(res);
     }
+  }
+
+  /// Retrieves cached menu data for a specific parentId
+  List<MenuResponse> getData(String parentId) {
+    return state[parentId] ?? [];
   }
 }
 
 final childMenuProviders =
-    StateNotifierProvider<ChildMenuProviders, AsyncValue<dynamic>>(
-  (ref) {
-    return ChildMenuProviders(ref: ref);
-  },
+    StateNotifierProvider<ChildMenuProviders, Map<String, List<MenuResponse>>>(
+  (ref) => ChildMenuProviders(ref),
 );

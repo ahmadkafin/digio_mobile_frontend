@@ -13,10 +13,12 @@ class BottomSheetMenWidgetHome extends HookConsumerWidget {
     super.key,
     required this.deviceSize,
     required this.data,
+    required this.user,
   });
 
   final Size deviceSize;
   final List<MenuResponse> data;
+  final Map<String, dynamic> user;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -57,7 +59,8 @@ class BottomSheetMenWidgetHome extends HookConsumerWidget {
                 return GestureDetector(
                   onTap: () => ref
                       .read(childMenuProviders.notifier)
-                      .get("ABC", data[index].menuid!)
+                      .get("ABC", 'ahmad.kafin-e', 'PERTAMINA',
+                          data[index].menuid!)
                       .then(
                         (res) => res.fold(
                           (l) => Navigator.push(
@@ -68,6 +71,8 @@ class BottomSheetMenWidgetHome extends HookConsumerWidget {
                                 labelparent: data[index].label!,
                                 parentIcon: data[index].iconFlt!,
                                 data: l,
+                                type: "Lainnya",
+                                user: user,
                               ),
                             ),
                           ),
@@ -79,6 +84,8 @@ class BottomSheetMenWidgetHome extends HookConsumerWidget {
                                 labelparent: data[index].label!,
                                 data: r,
                                 parentIcon: data[index].iconFlt!,
+                                type: "Lainnya",
+                                user: user,
                               ),
                             ),
                           ),

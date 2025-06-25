@@ -2,6 +2,7 @@ import 'package:animations/animations.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/app/library/home/presentation/widget/mapHeader.widget.home.dart';
+import 'package:myapp/app/library/home/response/panjangpipa.response.dart';
 import 'package:myapp/app/library/settings/presentation/page/settings.page.dart';
 
 class HeaderWidgetHome extends StatelessWidget {
@@ -12,6 +13,7 @@ class HeaderWidgetHome extends StatelessWidget {
     required this.controller,
     required this.stateIndex,
     required this.curr,
+    required this.panjangPipa,
   });
 
   final Size deviceSize;
@@ -19,13 +21,14 @@ class HeaderWidgetHome extends StatelessWidget {
   final CarouselSliderController controller;
   final Function stateIndex;
   final int curr;
+  final List<PanjangPipaResponse> panjangPipa;
 
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
       backgroundColor: Color.fromRGBO(30, 30, 30, 1),
       stretch: false,
-      expandedHeight: 300,
+      expandedHeight: 320,
       snap: false,
       floating: false,
       pinned: true,
@@ -87,7 +90,7 @@ class HeaderWidgetHome extends StatelessWidget {
               children: [
                 Container(
                   padding: const EdgeInsets.only(
-                    bottom: 10,
+                    bottom: 0,
                     left: 10,
                     right: 10,
                   ),
@@ -120,6 +123,7 @@ class HeaderWidgetHome extends StatelessWidget {
                     controller: controller,
                     curr: curr,
                     stateIndex: stateIndex,
+                    panjangPipa: panjangPipa,
                   ),
                 ),
               ],

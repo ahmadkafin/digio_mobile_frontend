@@ -12,16 +12,18 @@ class ChildrenMenuPartials extends HookConsumerWidget {
     super.key,
     required this.data,
     required this.index,
+    required this.user,
   });
   final List<MenuResponse> data;
   final int index;
+  final Map<String, dynamic> user;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
       onTap: () => ref
           .read(childMenuProviders.notifier)
-          .get("ABC", data[0].menuid!)
+          .get("ABC", 'ahmad.kafin-e', 'PERTAMINA', data[0].menuid!)
           .then(
             (res) => res.fold(
               (l) => [],
@@ -33,6 +35,8 @@ class ChildrenMenuPartials extends HookConsumerWidget {
                     labelparent: data[index].label!,
                     parentIcon: data[index].iconFlt!,
                     data: r,
+                    type: "Lainnya",
+                    user: user,
                   ),
                 ),
               ),

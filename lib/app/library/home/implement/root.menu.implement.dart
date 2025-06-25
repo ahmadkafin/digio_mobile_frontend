@@ -2,9 +2,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myapp/app/library/home/response/menu.response.dart';
+import 'package:myapp/core/utils/endpoint.utils.dart';
 
 abstract class RootMenuImplement {
-  Future<List<MenuResponse>> get(String token);
+  Future<List<MenuResponse>> get(
+      String token, String username, String directory);
 }
 
 class RootMenuRepoImplement implements RootMenuImplement {
@@ -14,20 +16,27 @@ class RootMenuRepoImplement implements RootMenuImplement {
   RootMenuRepoImplement() {
     dio = Dio(
       BaseOptions(
-        baseUrl: "http://192.168.50.254:8080/",
+        baseUrl: url,
         responseType: ResponseType.json,
       ),
     );
   }
 
   @override
-  Future<List<MenuResponse>> get(String token) async {
+  Future<List<MenuResponse>> get(
+    String token,
+    String username,
+    String directory,
+  ) async {
     try {
       Response response = await dio!.post(
         'rootmenu/get',
         options: Options(
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': token,
+            'username': username,
+            'directory': directory,
           },
         ),
       );

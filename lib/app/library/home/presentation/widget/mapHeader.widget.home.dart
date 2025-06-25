@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/app/library/home/response/panjangpipa.response.dart';
 import 'package:myapp/core/utils/headerSlider.utils.dart';
 
 class MapHeaderWidgetHome extends StatelessWidget {
@@ -9,17 +10,18 @@ class MapHeaderWidgetHome extends StatelessWidget {
     required this.controller,
     required this.stateIndex,
     required this.curr,
+    required this.panjangPipa,
   });
 
   final Size deviceSize;
   final CarouselSliderController controller;
   final Function stateIndex;
   final int curr;
+  final List<PanjangPipaResponse> panjangPipa;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
       margin: const EdgeInsets.symmetric(vertical: 5),
       height: deviceSize.height / 4.3,
       // decoration: BoxDecoration(
@@ -58,7 +60,7 @@ class MapHeaderWidgetHome extends StatelessWidget {
                   ),
                   child: CarouselSlider(
                     carouselController: controller,
-                    items: headerCarousel(deviceSize),
+                    items: headerCarousel(deviceSize, panjangPipa),
                     options: CarouselOptions(
                       height: deviceSize.height,
                       viewportFraction: 1,
@@ -82,7 +84,10 @@ class MapHeaderWidgetHome extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: headerCarousel(deviceSize).asMap().entries.map(
+                  children: headerCarousel(deviceSize, panjangPipa)
+                      .asMap()
+                      .entries
+                      .map(
                     (entry) {
                       return GestureDetector(
                         onTap: () => controller.animateToPage(entry.key),

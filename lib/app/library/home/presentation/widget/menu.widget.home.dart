@@ -10,6 +10,7 @@ import 'package:myapp/app/library/home/providers/child.menu.providers.dart';
 import 'package:myapp/app/library/home/response/menu.response.dart';
 import 'package:myapp/core/utils/fontAwesomeMapping.utils.dart';
 import 'package:myapp/core/utils/gradientColorBackground.utils.dart';
+import 'package:myapp/core/utils/styleText.utils.dart';
 
 class MenuWidgetHome extends HookConsumerWidget {
   const MenuWidgetHome({
@@ -37,43 +38,48 @@ class MenuWidgetHome extends HookConsumerWidget {
         height: 35, // Needed to constrain vertical height
         child: ListView.builder(
           itemBuilder: (context, index) {
-            if (data[index].label == 'Help') {
-              return null;
-            } else {
-              return GestureDetector(
-                onTap: () => setActive(index, data[index].menuid),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: Chip(
-                    elevation: 8,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(50),
-                      ),
+            return GestureDetector(
+              onTap: () => setActive(
+                index,
+                data[index].menuid,
+                data[index].label,
+                data[index].iconFlt,
+                data[index].menuid,
+              ),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: Chip(
+                  elevation: 8,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(50),
                     ),
-                    avatar: CircleAvatar(
-                      radius: 20,
-                      backgroundColor: Colors.black,
-                      child: FaIcon(
-                        getIconData(data[index].iconFlt!) ??
-                            FontAwesomeIcons.question,
-                        color: Colors.white,
-                        size: 10,
-                      ),
-                    ),
-                    label: Text(
-                      data[index].label!,
-                      overflow: TextOverflow.visible,
-                    ),
-                    labelStyle: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    backgroundColor: curIndex == index ? Colors.amber : null,
                   ),
+                  avatar: CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors.black,
+                    child: FaIcon(
+                      getIconData(data[index].iconFlt!) ??
+                          FontAwesomeIcons.question,
+                      color: Colors.white,
+                      size: 10,
+                    ),
+                  ),
+                  label: Text(
+                    data[index].label!,
+                    overflow: TextOverflow.visible,
+                    style: TextStyle(
+                      fontFamily: fontFamily,
+                    ),
+                  ),
+                  labelStyle: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  backgroundColor: curIndex == index ? Colors.amber : null,
                 ),
-              );
-            }
+              ),
+            );
           },
           itemCount: data.length,
           scrollDirection: Axis.horizontal,

@@ -14,6 +14,7 @@ class MenuResponse {
     required this.menuorder,
     required this.filterWilayah,
     required this.iconFlt,
+    required this.contentstring,
   });
 
   String? menuid,
@@ -22,6 +23,7 @@ class MenuResponse {
       label,
       url,
       contenttype,
+      contentstring,
       querystring,
       icon,
       icontype,
@@ -44,6 +46,7 @@ class MenuResponse {
         menuorder: json['menuorder'],
         filterWilayah: json['filterWilayah'],
         iconFlt: json['icon_flt'],
+        contentstring: json['contentstring'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -61,5 +64,6 @@ class MenuResponse {
         'menuorder': menuorder,
         'filterWilayah': filterWilayah,
         'icon_flt': iconFlt,
+        'contentstring': contentstring,
       };
 }

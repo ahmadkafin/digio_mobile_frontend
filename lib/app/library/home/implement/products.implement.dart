@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myapp/app/library/home/response/products.response.dart';
+import 'package:myapp/core/utils/endpoint.utils.dart';
 
 abstract class ProductsImplement {
   Future<List<ProductsResponse>> get(String token);
@@ -14,7 +15,7 @@ class ProductsRepoImplement implements ProductsImplement {
   ProductsRepoImplement() {
     dio = Dio(
       BaseOptions(
-        baseUrl: "http://192.168.50.254:8080/",
+        baseUrl: url,
         responseType: ResponseType.json,
       ),
     );
@@ -27,6 +28,7 @@ class ProductsRepoImplement implements ProductsImplement {
         'products/get',
         options: Options(
           headers: {
+            'Authorization': token,
             'Content-Type': 'application/json',
           },
         ),

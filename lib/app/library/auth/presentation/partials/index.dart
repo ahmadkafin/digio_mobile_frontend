@@ -7,6 +7,7 @@ class TextField {
     isLoading,
     isGoogleLogin,
     changeObscure,
+    request,
   ) {
     return [
       TextFieldPartial(
@@ -17,6 +18,7 @@ class TextField {
         isLoading: isLoading,
         isGoogleLogin: isGoogleLogin,
         changeObscure: changeObscure,
+        request: request,
       ),
       TextFieldPartial(
         deviceSize: deviceSize,
@@ -26,6 +28,7 @@ class TextField {
         isLoading: isLoading,
         isGoogleLogin: isGoogleLogin,
         changeObscure: changeObscure,
+        request: request,
       ),
     ];
   }

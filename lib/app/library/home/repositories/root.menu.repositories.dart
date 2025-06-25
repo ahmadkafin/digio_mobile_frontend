@@ -1,22 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myapp/app/library/home/response/menu.response.dart';
 
-List<MenuResponse> data = [];
+/// StateProvider sebagai sumber data utama
+final rootMenuStateProvider = StateProvider<List<MenuResponse>>((ref) => []);
 
-final setRootMenuStateProvider = StateProvider<List<MenuResponse>?>(
-  (ref) => null,
+/// Provider pembaca (bisa langsung pakai [rootMenuStateProvider] juga jika tidak perlu memisahkan)
+final getRootMenuProvider = Provider<List<MenuResponse>>(
+  (ref) => ref.watch(rootMenuStateProvider),
 );
 
-final setRootMenuProvider = StateProvider.family<void, List<MenuResponse>>(
-  (ref, rootMenuData) {
-    ref.watch(setRootMenuStateProvider);
-    data = rootMenuData.isEmpty ? [] : rootMenuData;
-  },
-);
-
-final getRootMenuProvider = FutureProvider<List<MenuResponse>>(
-  (ref) async {
-    ref.watch(setRootMenuStateProvider);
-    return data;
-  },
-);
+/// Cara penggunaan di kode lain:
+///
+/// Menulis data:
+/// ref.read(rootMenuStateProvider.notifier).state = yourMenuList;
+///
+/// Membaca data:
+/// final menus = ref.watch(getRootMenuProvider);

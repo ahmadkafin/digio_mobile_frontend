@@ -19,8 +19,8 @@ class ProductsResponse {
         image: json['image'],
         video: json['video'],
         description: json['description'],
-        createdAt: json['createdAt'],
-        updatedAt: json['updatedAt'],
+        createdAt: json['created_at'],
+        updatedAt: json['updated_at'],
       );
 
   Map<String, dynamic> toJson() => {

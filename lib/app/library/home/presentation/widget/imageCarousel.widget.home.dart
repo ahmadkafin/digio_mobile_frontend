@@ -3,14 +3,20 @@ import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/app/library/banner/presentation/page/detail.page.banner.dart';
+import 'package:myapp/app/library/home/presentation/widget/imageconvert.widget.home.dart';
+import 'package:myapp/app/library/home/response/products.response.dart';
+import 'package:myapp/app/library/products/presentation/page/detail.page.products.dart';
+import 'package:myapp/core/utils/styleText.utils.dart';
 
 class ImageCarouselWidgetHome extends StatelessWidget {
   const ImageCarouselWidgetHome({
     super.key,
     required this.deviceSize,
+    required this.products,
   });
 
   final Size deviceSize;
+  final List<ProductsResponse> products;
 
   @override
   Widget build(BuildContext context) {
@@ -18,96 +24,94 @@ class ImageCarouselWidgetHome extends StatelessWidget {
       width: deviceSize.width,
       padding: const EdgeInsets.symmetric(vertical: 15),
       child: CarouselSlider(
-        items: [1, 2, 3, 4, 5].map(
-          (i) {
-            return Builder(
-              builder: (context) {
-                return Container(
-                  width: deviceSize.width,
-                  decoration: BoxDecoration(
-                    color: Colors.amber,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10),
-                    ),
+        items: products.map((product) {
+          return Builder(
+            builder: (context) {
+              return Container(
+                width: deviceSize.width,
+                decoration: BoxDecoration(
+                  color: Colors.amber,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10),
                   ),
-                  child: OpenContainer(
-                    closedBuilder:
-                        (BuildContext _, VoidCallback openContainer) {
-                      return ClipRRect(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
-                        ),
-                        child: Stack(
-                          fit: StackFit.expand,
-                          alignment: Alignment.bottomRight,
-                          children: [
-                            Positioned(
-                              width: deviceSize.width,
-                              child: Image.network(
-                                "https://picsum.photos/1920/1080?random=$i",
-                                fit: BoxFit.contain,
-                              ),
+                ),
+                child: OpenContainer(
+                  closedBuilder: (BuildContext _, VoidCallback openContainer) {
+                    return ClipRRect(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                      child: Stack(
+                        fit: StackFit.expand,
+                        alignment: Alignment.bottomRight,
+                        children: [
+                          Positioned(
+                            width: deviceSize.width,
+                            child: ImageConvertWidget(
+                              base64Image: product.image.toString(),
                             ),
-                            Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.only(left: 10, right: 10),
-                                width: 135,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  color: Color.fromRGBO(0, 0, 0, 0.6),
-                                  borderRadius: BorderRadius.only(
-                                    bottomRight: Radius.circular(10),
-                                    topLeft: Radius.circular(10),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: Container(
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 10),
+                              width: 135,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: Color.fromRGBO(0, 0, 0, 0.6),
+                                borderRadius: BorderRadius.only(
+                                  bottomRight: Radius.circular(10),
+                                  topLeft: Radius.circular(10),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Lebih Lanjut",
+                                    style: TextStyle(
+                                      fontFamily: fontFamily,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Lebih Lanjut",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w600,
+                                  Container(
+                                    width: 25,
+                                    height: 25,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(50),
                                       ),
                                     ),
-                                    Container(
-                                      width: 25,
-                                      height: 25,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(50),
-                                        ),
-                                      ),
-                                      child: Icon(
-                                        Icons.arrow_forward_ios,
-                                        size: 10,
-                                      ),
+                                    child: Icon(
+                                      Icons.arrow_forward_ios,
+                                      size: 10,
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
-                      );
-                    },
-                    openBuilder: (BuildContext _, VoidCallback closeContainer) {
-                      return DetailPageBanner(
-                        image: "https://picsum.photos/1920/1080?random=$i",
-                        title: i.toString(),
-                      );
-                    },
-                  ),
-                );
-              },
-            );
-          },
-        ).toList(),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  openBuilder: (BuildContext _, VoidCallback closeContainer) {
+                    return DetailPageProducts(
+                      description: product.description.toString(),
+                      image: product.image.toString(),
+                      title: product.name.toString(),
+                    );
+                  },
+                ),
+              );
+            },
+          );
+        }).toList(),
         options: CarouselOptions(
           height: 150,
           viewportFraction: 0.8,

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_icon_class/font_awesome_icon_class.dart';
+import 'package:myapp/app/library/home/response/panjangpipa.response.dart';
+import 'package:myapp/core/utils/styleText.utils.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-List<Widget> headerCarousel(Size deviceSize) {
+List<Widget> headerCarousel(
+    Size deviceSize, List<PanjangPipaResponse> panjangPipa) {
   return [
     carouselOne(deviceSize),
-    carouselTwo(deviceSize),
+    carouselTwo(deviceSize, panjangPipa),
   ];
 }
 
@@ -27,6 +30,7 @@ Widget carouselOne(Size deviceSize) {
           Text(
             "Pipeline Overview",
             style: TextStyle(
+              fontFamily: fontFamily,
               color: Colors.black,
               fontSize: 12,
               fontWeight: FontWeight.w600,
@@ -68,7 +72,7 @@ Widget carouselOne(Size deviceSize) {
   );
 }
 
-Widget carouselTwo(Size deviceSize) {
+Widget carouselTwo(Size deviceSize, List<PanjangPipaResponse> panjangPipa) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
@@ -82,6 +86,7 @@ Widget carouselTwo(Size deviceSize) {
           Text(
             "Pipeline Growth",
             style: TextStyle(
+              fontFamily: fontFamily,
               color: Colors.black,
               fontSize: 12,
               fontWeight: FontWeight.w600,
@@ -110,37 +115,26 @@ Widget carouselTwo(Size deviceSize) {
             ),
           ),
           tooltipBehavior: TooltipBehavior(
-            enable: true,
-            activationMode: ActivationMode.singleTap,
-            format: 'point.x - point.y KM',
-            canShowMarker: false,
-            header: '',
-          ),
+              enable: true,
+              activationMode: ActivationMode.singleTap,
+              format: 'point.x - point.y KM',
+              canShowMarker: false,
+              header: '',
+              textStyle: TextStyle(fontFamily: fontFamily)),
           primaryYAxis: const NumericAxis(
             isVisible: false,
           ),
           series: [
-            ColumnSeries<PipelineData, int>(
-              xValueMapper: (PipelineData sales, _) => sales.year,
-              yValueMapper: (PipelineData sales, _) => sales.panjang,
-              dataSource: [
-                PipelineData(2020, 10688.68),
-                PipelineData(2021, 10755.84),
-                PipelineData(2022, 11524.91),
-                PipelineData(2023, 12609.92),
-                PipelineData(2024, 13552.60),
-                PipelineData(2025, 13581.01),
-              ],
+            ColumnSeries<PanjangPipaResponse, String>(
+              xValueMapper: (PanjangPipaResponse year, _) => year.tahun,
+              // xValueMapper: (PipelineData sales, _) => sales.year,
+              yValueMapper: (PanjangPipaResponse panjang, _) => panjang.panjang,
+              // yValueMapper: (PipelineData sales, _) => sales.panjang,
+              dataSource: panjangPipa,
             )
           ],
         ),
       ),
     ],
   );
-}
-
-class PipelineData {
-  PipelineData(this.year, this.panjang);
-  final int year;
-  final double panjang;
 }

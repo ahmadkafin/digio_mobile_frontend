@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:myapp/app/library/home/response/home.response.dart';
+import 'package:myapp/core/utils/endpoint.utils.dart';
 
 abstract class HomeImplement {
   Future<List<HomeResponse>> get(String token);
@@ -13,7 +14,7 @@ class HomeRepoImplement implements HomeImplement {
   HomeRepoImplement() {
     dio = Dio(
       BaseOptions(
-        baseUrl: "http://10.129.10.141/digiomobilebe/",
+        baseUrl: url,
         responseType: ResponseType.json,
       ),
     );
@@ -26,6 +27,7 @@ class HomeRepoImplement implements HomeImplement {
         'home/dashboard',
         options: Options(
           headers: {
+            'Authorization': token,
             'Content-Type': 'application/json',
           },
         ),
