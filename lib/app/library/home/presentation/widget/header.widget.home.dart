@@ -14,6 +14,7 @@ class HeaderWidgetHome extends StatelessWidget {
     required this.stateIndex,
     required this.curr,
     required this.panjangPipa,
+    required this.logout,
   });
 
   final Size deviceSize;
@@ -22,6 +23,7 @@ class HeaderWidgetHome extends StatelessWidget {
   final Function stateIndex;
   final int curr;
   final List<PanjangPipaResponse> panjangPipa;
+  final VoidCallback logout;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +67,7 @@ class HeaderWidgetHome extends StatelessWidget {
           ),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: logout,
           icon: Icon(
             Icons.power_settings_new_outlined,
             color: Colors.white,

@@ -24,7 +24,10 @@ class SplashScreenProviders extends StateNotifier<AsyncValue<bool>> {
           await ref.read(splashScreenRepoProvider).checkInitState(tokenStr);
 
       if (!res) {
-        storage.delete(key: 'isAuthKey');
+        await storage.delete(key: 'isAuthKey');
+        await storage.delete(key: 'cookieData');
+        await storage.delete(key: 'authDigioToken');
+        await storage.delete(key: 'authExpire');
       }
 
       // simpan hasil ke state async

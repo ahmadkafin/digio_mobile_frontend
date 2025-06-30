@@ -92,14 +92,19 @@ class MapHeaderWidgetHome extends StatelessWidget {
                       return GestureDetector(
                         onTap: () => controller.animateToPage(entry.key),
                         child: Container(
-                          width: 6,
+                          width: curr == entry.key ? 10 : 6,
                           height: 6,
                           margin: EdgeInsets.symmetric(
                             vertical: 1.0,
                             horizontal: 2.0,
                           ),
                           decoration: BoxDecoration(
-                            shape: BoxShape.circle,
+                            shape: curr == entry.key
+                                ? BoxShape.rectangle
+                                : BoxShape.circle,
+                            borderRadius: curr == entry.key
+                                ? BorderRadius.all(Radius.circular(20))
+                                : null,
                             color:
                                 curr == entry.key ? Colors.amber : Colors.black,
                           ),

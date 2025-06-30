@@ -6,6 +6,7 @@ import 'package:myapp/app/library/home/presentation/partials/flipbook.partials.h
 import 'package:myapp/app/library/home/presentation/partials/home.partials.home.dart';
 import 'package:myapp/app/library/home/presentation/partials/products.partials.home.dart';
 import 'package:myapp/app/library/home/presentation/partials/profile.partials.home.dart';
+import 'package:myapp/core/utils/dio_client.utils.dart';
 
 class HomePageHome extends StatefulHookConsumerWidget {
   const HomePageHome({super.key});
@@ -15,10 +16,44 @@ class HomePageHome extends StatefulHookConsumerWidget {
 }
 
 class _HomePageHomeState extends ConsumerState<HomePageHome> {
+  bool _isDialogShown = false;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    setupDioInterceptor(
+      onTokenAlmostExpired: () {
+        if (!mounted || _isDialogShown) return;
+        _isDialogShown = true;
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (dialogContext) => AlertDialog(
+            title: const Text("Sesi Hampir Habis"),
+            content: const Text(
+                "Sesi Anda akan berakhir dalam 30 detik. Perpanjang sekarang?"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(dialogContext).pop();
+                  _isDialogShown = false;
+                  // TODO: panggil refresh token di sini jika ada
+                },
+                child: const Text("Perpanjang"),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(dialogContext).pop();
+                  _isDialogShown = false;
+                },
+                child: const Text("Abaikan"),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override

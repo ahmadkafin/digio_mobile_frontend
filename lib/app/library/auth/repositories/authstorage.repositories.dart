@@ -9,6 +9,7 @@ const authUserKey = 'authUserKey';
 const authTokenKey = 'authToken';
 const authExpiryKey = 'authExpire';
 const authDigioTokenKey = 'authDigioToken';
+const cookieData = 'cookieData';
 
 final secureStorageProvider = Provider<FlutterSecureStorage>(
   (ref) => const FlutterSecureStorage(),
@@ -34,8 +35,10 @@ class AuthStoragerRepositories {
   Future<void> clear() async {
     await storage.delete(key: isAuthKey);
     await storage.delete(key: authTokenKey);
+    await storage.delete(key: authUserKey);
     await storage.delete(key: authExpiryKey);
     await storage.delete(key: authDigioTokenKey);
+    await storage.delete(key: cookieData);
   }
 
   Future<bool> isAuthenticated() async {

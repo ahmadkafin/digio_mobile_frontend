@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auth_buttons/auth_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -89,14 +91,17 @@ class _LoginPageAuthState extends ConsumerState<LoginPageAuth> {
                 isLoading
                     ? Flexible(
                         child: Center(
-                          child: CircularProgressIndicator(),
+                          child: CircularProgressIndicator(
+                            color: Color.fromRGBO(255, 170, 0, 1),
+                          ),
                         ),
                       )
                     : Flexible(
                         child: Column(
                           children: [
                             _buildButtonSubmit(deviceSize),
-                            _buildButtonGoogle(deviceSize)
+                            _buildButtonGoogle(deviceSize),
+                            _buildGuestButton(deviceSize),
                           ],
                         ),
                       )
@@ -171,6 +176,30 @@ class _LoginPageAuthState extends ConsumerState<LoginPageAuth> {
         ),
         child: Text(
           "SUBMIT",
+          style: TextStyle(fontWeight: FontWeight.w500),
+        ),
+      ),
+    );
+  }
+
+  Flexible _buildGuestButton(Size deviceSize) {
+    return Flexible(
+      child: ElevatedButton(
+        onPressed: () {},
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Color.fromRGBO(183, 183, 181, 1),
+          foregroundColor: Colors.black,
+          alignment: Alignment.center,
+          padding: EdgeInsets.symmetric(
+            horizontal: deviceSize.width / 3.7,
+            vertical: 10,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
+          ),
+        ),
+        child: Text(
+          "GUEST",
           style: TextStyle(fontWeight: FontWeight.w500),
         ),
       ),

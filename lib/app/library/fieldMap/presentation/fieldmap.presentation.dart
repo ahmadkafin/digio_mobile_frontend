@@ -1,28 +1,27 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:myapp/app/library/child/repositories/child.repositories.dart';
 import 'package:myapp/core/utils/styleText.utils.dart';
 
-class ChildPresentation extends StatefulWidget {
-  const ChildPresentation({
+class FieldMapPresentation extends StatefulWidget {
+  const FieldMapPresentation({
     super.key,
-    required this.cookieData,
     required this.title,
     required this.url,
-    required this.contenttype,
-    required this.querystring,
-    required this.contentstring,
+    required this.cookie,
   });
-  final String? cookieData, title, contenttype, url, querystring, contentstring;
+  final String? title;
+  final String? url;
+  final String? cookie;
 
   @override
-  State<ChildPresentation> createState() => _ChildPresentationState();
+  State<FieldMapPresentation> createState() => _FieldMapPresentationState();
 }
 
-class _ChildPresentationState extends State<ChildPresentation> {
-  final GlobalKey webViewKey = GlobalKey();
+class _FieldMapPresentationState extends State<FieldMapPresentation> {
+  final GlobalKey webViewKeyFieldMap = GlobalKey();
   InAppWebViewController? webViewController;
+
   InAppWebViewSettings settings = InAppWebViewSettings(
     isInspectable: kDebugMode,
     allowContentAccess: true,
@@ -42,17 +41,10 @@ class _ChildPresentationState extends State<ChildPresentation> {
   );
 
   double progress = 0;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     Size deviceSize = MediaQuery.of(context).size;
-    final uri = WebUri(widget.url!);
+    final uri = WebUri(widget.url ?? "");
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -63,7 +55,7 @@ class _ChildPresentationState extends State<ChildPresentation> {
           ),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.close),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () async {
             // Bersihkan cookie dan cache sebelum keluar
             await CookieManager.instance().deleteAllCookies();
@@ -78,26 +70,25 @@ class _ChildPresentationState extends State<ChildPresentation> {
       ),
       body: Stack(
         children: [
-          // WebView hanya muncul kalau progress >= 1.0
           Offstage(
             offstage: progress < 1.0,
             child: InAppWebView(
-              key: webViewKey,
+              key: webViewKeyFieldMap,
               initialUrlRequest: null,
               initialSettings: settings,
               onWebViewCreated: (controller) async {
                 webViewController = controller;
                 // Inject cookie
-                if (widget.cookieData != null) {
-                  var sessionCookie = widget.cookieData!.trim().split('=');
+                if (widget.cookie != null) {
+                  var sessionCookie = widget.cookie!.trim().split('=');
                   await CookieManager.instance().setCookie(
                     webViewController: controller,
-                    url: uri,
+                    url: WebUri('https://digio.pgn.co.id'),
                     name: sessionCookie[0],
                     value: sessionCookie[1].replaceAll(";", ''),
                     domain: uri.host,
                     isHttpOnly: true,
-                    isSecure: false,
+                    isSecure: true,
                     path: '/',
                   );
                 }
@@ -107,8 +98,7 @@ class _ChildPresentationState extends State<ChildPresentation> {
                   data: '''
                     <html>
                     <script>
-                      sessionStorage.setItem("contentstring", "${widget.contentstring}");
-                      sessionStorage.setItem("_dr", "${widget.querystring}");
+                     console.log("📦 document.cookie: " + document.cookie);
                       location.href = "${widget.url}";
                     </script>
                     </html>
@@ -123,7 +113,12 @@ class _ChildPresentationState extends State<ChildPresentation> {
                 return NavigationActionPolicy.ALLOW;
               },
               onLoadStop: (controller, url) async {
-                // Handle cookies or other post-load actions
+                final cookies =
+                    await CookieManager.instance().getCookies(url: url!);
+                for (var cookie in cookies) {
+                  print(
+                      "🍪 Cookie dari ${url.host}: ${cookie.name} = ${cookie.value}");
+                }
               },
               onProgressChanged: (_, int prog) {
                 setState(() {
@@ -136,8 +131,6 @@ class _ChildPresentationState extends State<ChildPresentation> {
               },
             ),
           ),
-
-          // Progress bar overlay
           if (progress < 1.0)
             Container(
               color: Color.fromRGBO(30, 30, 30, 1),

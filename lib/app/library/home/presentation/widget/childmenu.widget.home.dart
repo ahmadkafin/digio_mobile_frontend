@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_icon_class/font_awesome_icon_class.dart';
@@ -114,7 +116,9 @@ class ChildMenuWidgetHome extends HookConsumerWidget {
             ),
           ),
           SizedBox(
-            height: deviceSize.height / 30,
+            height: Platform.isIOS
+                ? deviceSize.height / 30
+                : deviceSize.height / 35,
             child: Text(
               isMore ? "Lainnya" : menu.label!,
               maxLines: 2,

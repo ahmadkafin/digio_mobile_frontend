@@ -1,8 +1,8 @@
 import 'package:animations/animations.dart';
-import 'package:carousel_slider/carousel_options.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/app/library/banner/presentation/page/detail.page.banner.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:myapp/app/library/home/presentation/widget/imageconvert.widget.home.dart';
 import 'package:myapp/app/library/home/response/products.response.dart';
 import 'package:myapp/app/library/products/presentation/page/detail.page.products.dart';
@@ -47,8 +47,19 @@ class ImageCarouselWidgetHome extends StatelessWidget {
                         children: [
                           Positioned(
                             width: deviceSize.width,
-                            child: ImageConvertWidget(
-                              base64Image: product.image.toString(),
+                            child: CachedNetworkImage(
+                              imageUrl:
+                                  'https://digio.pgn.co.id/digiomobilebe/static/images/products/${product.image}',
+                              placeholder: (context, url) => Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                              errorWidget: (context, url, error) => Center(
+                                child: FaIcon(
+                                  FontAwesomeIcons.question,
+                                  size: 40,
+                                ),
+                              ),
+                              fit: BoxFit.contain,
                             ),
                           ),
                           Positioned(
@@ -105,6 +116,7 @@ class ImageCarouselWidgetHome extends StatelessWidget {
                       description: product.description.toString(),
                       image: product.image.toString(),
                       title: product.name.toString(),
+                      video: product.video ?? "",
                     );
                   },
                 ),

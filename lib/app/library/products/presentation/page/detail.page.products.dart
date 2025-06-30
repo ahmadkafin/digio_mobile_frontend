@@ -1,18 +1,20 @@
 import 'package:animations/animations.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:myapp/app/library/home/presentation/widget/imageconvert.widget.home.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:myapp/app/library/products/presentation/page/video.page.products.dart';
 import 'package:myapp/core/utils/styleText.utils.dart';
 
 class DetailPageProducts extends StatefulWidget {
-  final String image, title, description;
+  final String image, title, description, video;
 
   const DetailPageProducts({
     super.key,
     required this.image,
     required this.title,
     required this.description,
+    required this.video,
   });
 
   @override
@@ -49,12 +51,27 @@ class _DetailPageProductsState extends State<DetailPageProducts> {
       floating: true,
       pinned: true,
       elevation: 8,
-      actions: [_buildPlayButton()],
+      actions: [
+        _buildPlayButton(),
+      ],
       flexibleSpace: FlexibleSpaceBar(
         collapseMode: CollapseMode.parallax,
         centerTitle: true,
         title: _buildTitleOverlay(deviceSize),
-        background: ImageConvertWidget(base64Image: widget.image),
+        background: CachedNetworkImage(
+          imageUrl:
+              'https://digio.pgn.co.id/digiomobilebe/static/images/products/${widget.image}',
+          placeholder: (context, url) => Center(
+            child: CircularProgressIndicator(),
+          ),
+          errorWidget: (context, url, error) => Center(
+            child: FaIcon(
+              FontAwesomeIcons.question,
+              size: 40,
+            ),
+          ),
+          fit: BoxFit.contain,
+        ),
       ),
     );
   }
@@ -67,23 +84,36 @@ class _DetailPageProductsState extends State<DetailPageProducts> {
         closedColor: Colors.transparent,
         closedShape: const CircleBorder(),
         closedElevation: 0,
-        closedBuilder: (_, openContainer) => Container(
-          padding: const EdgeInsets.all(8),
-          decoration: const BoxDecoration(
-            color: Color.fromRGBO(255, 170, 0, 1),
-            shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black26,
-                blurRadius: 8,
-                offset: Offset(2, 4),
-              )
-            ],
-          ),
-          child: const Icon(
-            Icons.play_arrow,
-            color: Color.fromRGBO(30, 30, 30, 1),
-            size: 28,
+        closedBuilder: (_, openContainer) => GestureDetector(
+          onTap: () {
+            if (widget.video == "" || widget.video == "null") {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text("There is no coresponding video available"),
+                ),
+              );
+            } else {
+              openContainer();
+            }
+          },
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: const BoxDecoration(
+              color: Color.fromRGBO(255, 170, 0, 1),
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 8,
+                  offset: Offset(2, 4),
+                )
+              ],
+            ),
+            child: const Icon(
+              Icons.play_arrow,
+              color: Color.fromRGBO(30, 30, 30, 1),
+              size: 28,
+            ),
           ),
         ),
         openBuilder: (_, __) => VideoPageProducts(

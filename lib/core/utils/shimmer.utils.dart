@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -128,5 +129,89 @@ Widget childMenuShimmer(Size deviceSize) {
       ),
     ),
     itemCount: 5,
+  );
+}
+
+Widget productsShimmer(Size deviceSize) {
+  return Container(
+    color: Colors.transparent,
+    child: CarouselSlider(
+      items: [1, 2, 3, 4].map((index) {
+        return Shimmer.fromColors(
+          baseColor: const Color.fromARGB(255, 206, 206, 206),
+          highlightColor: const Color.fromARGB(255, 255, 255, 255),
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 5),
+            width: deviceSize.width,
+            decoration: BoxDecoration(
+              color: Colors.amber,
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
+            ),
+          ),
+        );
+      }).toList(),
+      options: CarouselOptions(
+        height: 150,
+        viewportFraction: 0.8,
+        initialPage: 0,
+        enableInfiniteScroll: true,
+        reverse: false,
+        autoPlay: false,
+        autoPlayInterval: Duration(seconds: 5),
+        autoPlayAnimationDuration: Duration(milliseconds: 1500),
+        autoPlayCurve: Curves.fastOutSlowIn,
+        enlargeCenterPage: true,
+        enlargeFactor: 0.2,
+        scrollDirection: Axis.horizontal,
+        pageSnapping: true,
+        pauseAutoPlayOnTouch: true,
+      ),
+    ),
+  );
+}
+
+Widget productsPartialShimmer() {
+  return SliverPadding(
+    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+    sliver: SliverGrid.builder(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        mainAxisSpacing: 16,
+        crossAxisSpacing: 16,
+        childAspectRatio: 0.75,
+      ),
+      itemCount: 6,
+      itemBuilder: (context, index) {
+        return Shimmer.fromColors(
+          baseColor: const Color.fromARGB(255, 206, 206, 206),
+          highlightColor: const Color.fromARGB(255, 255, 255, 255),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Container(
+                    color: Colors.amber,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Container(
+                height: 20,
+                decoration: BoxDecoration(
+                  color: Colors.amber,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(5),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    ),
   );
 }

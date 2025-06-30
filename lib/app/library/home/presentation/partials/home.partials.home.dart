@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:myapp/app/library/auth/providers/auth.providers.dart';
 import 'package:myapp/app/library/home/presentation/widget/childmenu.widget.home.dart';
 import 'package:myapp/app/library/home/presentation/widget/header.widget.home.dart';
 import 'package:myapp/app/library/home/presentation/widget/horizontalgrid.widget.home.dart';
@@ -14,7 +15,6 @@ import 'package:myapp/app/library/home/providers/home.providers.dart';
 import 'package:myapp/app/library/home/providers/panjangpipa.providers.dart';
 import 'package:myapp/app/library/home/providers/products.providers.dart';
 import 'package:myapp/app/library/home/providers/root.menu.providers.dart';
-import 'package:myapp/app/library/home/repositories/products.repositories.dart';
 import 'package:myapp/app/library/home/response/menu.response.dart';
 import 'package:myapp/core/utils/shimmer.utils.dart';
 import 'package:myapp/core/utils/styleText.utils.dart';
@@ -97,7 +97,7 @@ class _HomePartialsHomeState extends ConsumerState<HomePartialsHome> {
     });
 
     ref.read(homeProviders.notifier).get(token);
-    ref.read(productsProviders.notifier).get(token);
+    ref.read(productsProviders.notifier).get();
     ref.read(panjangPipaProviders.notifier).get(token);
   }
 
@@ -122,6 +122,10 @@ class _HomePartialsHomeState extends ConsumerState<HomePartialsHome> {
           directory,
           parrentid,
         );
+  }
+
+  Future<void> _logout() async {
+    await ref.read(authProvider.notifier).logout();
   }
 
   @override
@@ -172,6 +176,7 @@ class _HomePartialsHomeState extends ConsumerState<HomePartialsHome> {
         curr: _current,
         stateIndex: stateIndex,
         panjangPipa: data,
+        logout: _logout,
       ),
     );
   }
@@ -279,18 +284,17 @@ class _HomePartialsHomeState extends ConsumerState<HomePartialsHome> {
   }
 
   Widget _buildProductsCarousel(Size deviceSize) {
-    return ref.watch(getProductsProvider).when(
-          loading: () => SizedBox(
-            width: deviceSize.width,
-            height: 200,
-            child: const Center(child: CircularProgressIndicator()),
+    return ref.watch(productsProviders).when(
+          loading: () => Container(
+            margin: const EdgeInsets.only(top: 10),
+            child: productsShimmer(deviceSize),
           ),
           error: (error, _) => SizedBox(
             width: deviceSize.width,
             height: 200,
             child: Center(child: Text("Error: $error")),
           ),
-          data: (products) => products.isEmpty
+          data: (products) => products!.isEmpty
               ? SizedBox(
                   width: deviceSize.width,
                   height: 200,
@@ -302,7 +306,9 @@ class _HomePartialsHomeState extends ConsumerState<HomePartialsHome> {
                   ),
                 )
               : ImageCarouselWidgetHome(
-                  deviceSize: deviceSize, products: products),
+                  deviceSize: deviceSize,
+                  products: products,
+                ),
         );
   }
 

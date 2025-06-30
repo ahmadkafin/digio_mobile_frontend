@@ -39,7 +39,7 @@ class _ProfilePartialsHomeState extends ConsumerState<ProfilePartialsHome> {
           _user = jsonMap;
         });
       } catch (e) {
-        print("Failed to decode user JSON: $e");
+        debugPrint("Failed to decode user JSON: $e");
       }
     }
   }
@@ -50,8 +50,6 @@ class _ProfilePartialsHomeState extends ConsumerState<ProfilePartialsHome> {
   }
 
   Future<void> _logout() async {
-    // TODO: Connect to authProvider.logout or similar
-    print("User logged out");
     await ref.read(authProvider.notifier).logout();
   }
 

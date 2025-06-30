@@ -1,10 +1,13 @@
 import 'package:animations/animations.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:myapp/app/library/home/presentation/widget/imageconvert.widget.home.dart';
 import 'package:myapp/app/library/home/providers/products.providers.dart';
 import 'package:myapp/app/library/home/repositories/products.repositories.dart';
 import 'package:myapp/app/library/products/presentation/page/detail.page.products.dart';
+import 'package:myapp/core/utils/shimmer.utils.dart';
 import 'package:myapp/core/utils/styleText.utils.dart';
 
 // --- Tambahan agar hanya fetch sekali
@@ -23,7 +26,7 @@ class ProductsPartialsHome extends ConsumerWidget {
     if (!hasFetched) {
       // fetch hanya sekali
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        ref.read(productsProviders.notifier).get("ABC");
+        ref.read(productsProviders.notifier).get();
         ref.read(hasFetchedProductsProvider.notifier).state = true;
       });
     }
@@ -71,13 +74,8 @@ class ProductsPartialsHome extends ConsumerWidget {
   }
 
   Widget _buildProductGrid(Size size, WidgetRef ref) {
-    return ref.watch(getProductsProvider).when(
-          loading: () => const SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 50),
-              child: Center(child: CircularProgressIndicator()),
-            ),
-          ),
+    return ref.watch(productsProviders).when(
+          loading: () => productsPartialShimmer(),
           error: (error, _) => SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 50),
@@ -85,7 +83,7 @@ class ProductsPartialsHome extends ConsumerWidget {
             ),
           ),
           data: (products) {
-            if (products.isEmpty) {
+            if (products!.isEmpty) {
               return SliverToBoxAdapter(
                 child: Center(
                   child: Padding(
@@ -131,8 +129,20 @@ class ProductsPartialsHome extends ConsumerWidget {
                           Expanded(
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(12),
-                              child: ImageConvertWidget(
-                                  base64Image: product.image ?? ""),
+                              child: CachedNetworkImage(
+                                imageUrl:
+                                    'https://digio.pgn.co.id/digiomobilebe/static/images/products/${product.image}',
+                                placeholder: (context, url) => Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                                errorWidget: (context, url, error) => Center(
+                                  child: FaIcon(
+                                    FontAwesomeIcons.question,
+                                    size: 40,
+                                  ),
+                                ),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                           const SizedBox(height: 8),
@@ -154,6 +164,7 @@ class ProductsPartialsHome extends ConsumerWidget {
                       image: product.image ?? "",
                       title: product.name ?? "",
                       description: product.description ?? "",
+                      video: product.video ?? "",
                     ),
                   );
                 },
